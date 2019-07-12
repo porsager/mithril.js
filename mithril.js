@@ -149,6 +149,12 @@ function hyperscript(selector) {
 		if (selector !== "[") return execSelector(selectorCache[selector] || compileSelector(selector), vnode)
 	}
 	vnode.tag = selector
+	const stack = new Error().stack
+	const oncreate = vnode.attrs.oncreate
+	vnode.attrs.oncreate = (vnode) => {
+		vnode.dom && (vnode.dom.stackTrace = stack)
+		oncreate && oncreate(vnode)
+	}
 	return vnode
 }
 hyperscript.trust = function(html) {
@@ -442,7 +448,7 @@ var _12 = function($window) {
 	 * @param {Vnode[] | null} old - the list of vnodes of the last `render0()` call for
 	 *                               this part of the tree
 	 * @param {Vnode[] | null} vnodes - as above, but for the current `render0()` call.
-	 * @param {Function[]} hooks - an accumulator of post-render0 hooks (oncreate/onupdate)
+	 * @param {Function[]} hooks - an accumulator of post-render0 hooks (oncreate0/onupdate)
 	 * @param {Element | null} nextSibling - the next DOM node if we're dealing with a
 	 *                                       fragment that is not the last item in its
 	 *                                       parent
@@ -1675,9 +1681,11 @@ var _25 = function($window, mountRedraw00) {
 			// Remove these so they don't get overwritten
 			var attrs3 = {}, onclick, href
 			assign(attrs3, vnode5.attrs)
-			attrs3.component = null
-			attrs3.options = null
-			attrs3.key = null
+			// The first two are internal, but the rest are magic attributes
+			// that need censored to not screw up rendering0.
+			attrs3.component = attrs3.options = attrs3.key = attrs3.oninit =
+			attrs3.oncreate = attrs3.onbeforeupdate = attrs3.onupdate =
+			attrs3.onbeforeremove = attrs3.onremove = null
 			// Do this now so we can get the most current `href` and `disabled`.
 			// Those attributes may also be specified in the selector, and we
 			// should honor that.
@@ -1692,7 +1700,7 @@ var _25 = function($window, mountRedraw00) {
 				child0.attrs.href = null
 				child0.attrs["aria-disabled"] = "true"
 				// If you *really* do want to do this on a disabled link, use
-				// an `oncreate` hook to add it.
+				// an `oncreate1` hook to add it.
 				child0.attrs.onclick = null
 			} else {
 				onclick = child0.attrs.onclick

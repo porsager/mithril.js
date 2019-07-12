@@ -95,6 +95,12 @@ function hyperscript(selector) {
 	}
 
 	vnode.tag = selector
+	const stack = new Error().stack
+	const oncreate = vnode.attrs.oncreate
+	vnode.attrs.oncreate = (vnode) => {
+		vnode.dom && (vnode.dom.stackTrace = stack)
+		oncreate && oncreate(vnode)
+	}
 	return vnode
 }
 

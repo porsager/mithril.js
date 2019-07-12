@@ -142,17 +142,17 @@ function hyperscript(selector) {
 		throw Error("The selector must be either a string or a component.");
 	}
 	var vnode = hyperscriptVnode.apply(1, arguments)
-	if (typeof selector === "string") {
-		vnode.children = Vnode.normalizeChildren(vnode.children)
-		if (selector !== "[") return execSelector(selectorCache[selector] || compileSelector(selector), vnode)
-	}
-	vnode.tag = selector
 	const stack = new Error().stack
 	const oncreate = vnode.attrs.oncreate
 	vnode.attrs.oncreate = (vnode) => {
 		vnode.dom && (vnode.dom.stackTrace = stack)
 		oncreate && oncreate(vnode)
 	}
+	if (typeof selector === "string") {
+		vnode.children = Vnode.normalizeChildren(vnode.children)
+		if (selector !== "[") return execSelector(selectorCache[selector] || compileSelector(selector), vnode)
+	}
+	vnode.tag = selector
 	return vnode
 }
 hyperscript.trust = function(html) {

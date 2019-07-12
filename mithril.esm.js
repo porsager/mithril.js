@@ -289,7 +289,11 @@ if (typeof window !== "undefined") {
 } else {
 }
 var _12 = function($window) {
+<<<<<<< HEAD
 	var $doc = $window && $window.document
+=======
+	var $doc = $window.document
+>>>>>>> origin/esm-dev
 	var currentRedraw
 	var nameSpace = {
 		svg: "http://www.w3.org/2000/svg",
@@ -1422,7 +1426,10 @@ m.m = hyperscript
 m.trust = hyperscript.trust
 m.fragment = hyperscript.fragment
 m.mount = mountRedraw.mount
+<<<<<<< HEAD
 var m3 = hyperscript
+=======
+>>>>>>> origin/esm-dev
 var Promise = PromisePolyfill
 // The extra `data0` parameter is2 for if you want to append to an existing
 // parameters object.
@@ -1476,7 +1483,11 @@ var parsePathname = function(url) {
 			: parseQueryString(url.slice(queryIndex0 + 1, queryEnd0)),
 	}
 }
+<<<<<<< HEAD
 // Compiles a template into a function that takes a resolved0 path2 (without query0
+=======
+// Compiles a template into a function that takes a resolved1 path2 (without query0
+>>>>>>> origin/esm-dev
 // strings) and returns an object containing the template parameters with their
 // parsed values. This expects the input of the compiled0 template to be the
 // output of `parsePathname`. Note that it does *not* remove query0 parameters
@@ -1517,6 +1528,12 @@ var compileTemplate = function(template) {
 }
 var sentinel0 = {}
 var _25 = function($window, mountRedraw00) {
+<<<<<<< HEAD
+=======
+	var callAsync0 = typeof setImmediate === "function" ? setImmediate : setTimeout
+	var supportsPushState = typeof $window.history.pushState === "function"
+	var routePrefix = "#!"
+>>>>>>> origin/esm-dev
 	var fireAsync
 	function setPath(path0, data, options) {
 		path0 = buildPathname(path0, data)
@@ -1524,6 +1541,7 @@ var _25 = function($window, mountRedraw00) {
 			fireAsync()
 			var state = options ? options.state : null
 			var title = options ? options.title : null
+<<<<<<< HEAD
 			if (options && options.replace) $window.history.replaceState(state, title, route.prefix + path0)
 			else $window.history.pushState(state, title, route.prefix + path0)
 		}
@@ -1534,6 +1552,17 @@ var _25 = function($window, mountRedraw00) {
 	var currentResolver = sentinel0, component, attrs3, currentPath, lastUpdate
 	var SKIP = route.SKIP = {}
 	function route(root, defaultRoute, routes) {
+=======
+			if (options && options.replace) $window.history.replaceState(state, title, routePrefix + path0)
+			else $window.history.pushState(state, title, routePrefix + path0)
+		}
+		else {
+			$window.location.href = routePrefix + path0
+		}
+	}
+	var currentResolver = sentinel0, component, attrs3, currentPath, lastUpdate
+	var route = function(root, defaultRoute, routes) {
+>>>>>>> origin/esm-dev
 		if (root == null) throw new Error("Ensure the DOM element that was passed to `m.route` is not undefined")
 		// 0 = start0
 		// 1 = init
@@ -1550,10 +1579,14 @@ var _25 = function($window, mountRedraw00) {
 				check: compileTemplate(route),
 			}
 		})
+<<<<<<< HEAD
 		var callAsync0 = typeof setImmediate === "function" ? setImmediate : setTimeout
 		var p = Promise.resolve()
 		var scheduled = false
 		var onremove0
+=======
+		var onremove0, asyncId
+>>>>>>> origin/esm-dev
 		fireAsync = null
 		if (defaultRoute != null) {
 			var defaultData = parsePathname(defaultRoute)
@@ -1562,6 +1595,7 @@ var _25 = function($window, mountRedraw00) {
 			}
 		}
 		function resolveRoute() {
+<<<<<<< HEAD
 			scheduled = false
 			// Consider the pathname holistically. The prefix might even be invalid,
 			// but that's not our problem.
@@ -1569,6 +1603,14 @@ var _25 = function($window, mountRedraw00) {
 			if (route.prefix[0] !== "#") {
 				prefix = $window.location.search + prefix
 				if (route.prefix[0] !== "?") {
+=======
+			// Consider the pathname holistically. The prefix might even be invalid,
+			// but that's not our problem.
+			var prefix = $window.location.hash
+			if (routePrefix[0] !== "#") {
+				prefix = $window.location.search + prefix
+				if (routePrefix[0] !== "?") {
+>>>>>>> origin/esm-dev
 					prefix = $window.location.pathname + prefix
 					if (prefix[0] !== "/") prefix = "/" + prefix
 				}
@@ -1578,6 +1620,7 @@ var _25 = function($window, mountRedraw00) {
 			// optimized cons string.
 			var path0 = prefix.concat()
 				.replace(/(?:%[a-f89][a-f0-9])+/gim, decodeURIComponent)
+<<<<<<< HEAD
 				.slice(route.prefix.length)
 			var data = parsePathname(path0)
 			assign(data.params, $window.history.state)
@@ -1642,6 +1685,56 @@ var _25 = function($window, mountRedraw00) {
 			$window.addEventListener("popstate", fireAsync, false)
 		} else if (route.prefix[0] === "#") {
 			fireAsync = null
+=======
+				.slice(routePrefix.length)
+			var data = parsePathname(path0)
+			assign(data.params, $window.history.state)
+			for (var i = 0; i < compiled.length; i++) {
+				if (compiled[i].check(data)) {
+					var payload = compiled[i].component
+					var route = compiled[i].route
+					var update = lastUpdate = function(routeResolver, comp) {
+						if (update !== lastUpdate) return
+						component = comp != null && (typeof comp.view === "function" || typeof comp === "function")? comp : "div"
+						attrs3 = data.params, currentPath = path0, lastUpdate = null
+						currentResolver = routeResolver.render ? routeResolver : null
+						if (state === 2) mountRedraw00.redraw()
+						else {
+							state = 2
+							mountRedraw00.redraw.sync()
+						}
+					}
+					if (payload.view || typeof payload === "function") update({}, payload)
+					else {
+						if (payload.onmatch) {
+							Promise.resolve(payload.onmatch(data.params, path0, route)).then(function(resolved0) {
+								update(payload, resolved0)
+							}, function () {
+								if (path0 === defaultRoute) throw new Error("Could not resolve default route " + defaultRoute)
+								setPath(defaultRoute, null, {replace: true})
+							})
+						}
+						else update(payload, "div")
+					}
+					return
+				}
+			}
+			if (path0 === defaultRoute) throw new Error("Could not resolve default route " + defaultRoute)
+			setPath(defaultRoute, null, {replace: true})
+		}
+		if (supportsPushState) {
+			onremove0 = function() {
+				$window.removeEventListener("popstate", fireAsync, false)
+			}
+			$window.addEventListener("popstate", fireAsync = function() {
+				if (asyncId) return
+				asyncId = callAsync0(function() {
+					asyncId = null
+					resolveRoute()
+				})
+			}, false)
+		} else if (routePrefix[0] === "#") {
+>>>>>>> origin/esm-dev
 			onremove0 = function() {
 				$window.removeEventListener("hashchange", resolveRoute, false)
 			}
@@ -1672,6 +1765,7 @@ var _25 = function($window, mountRedraw00) {
 		setPath(path0, data, options)
 	}
 	route.get = function() {return currentPath}
+<<<<<<< HEAD
 	route.prefix = "#!"
 	route.Link = {
 		view: function(vnode5) {
@@ -1742,6 +1836,27 @@ var _25 = function($window, mountRedraw00) {
 	}
 	route.param = function(key4) {
 		return attrs3 && key4 != null ? attrs3[key4] : attrs3
+=======
+	route.prefix = function(prefix) {routePrefix = prefix}
+	var link = function(options, vnode5) {
+		vnode5.dom.setAttribute("href", routePrefix + vnode5.attrs.href)
+		vnode5.dom.onclick = function(e) {
+			if (e.ctrlKey || e.metaKey || e.shiftKey || e.which === 2) return
+			e.preventDefault()
+			e.redraw = false
+			var href = this.getAttribute("href")
+			if (href.indexOf(routePrefix) === 0) href = href.slice(routePrefix.length)
+			route.set(href, undefined, options)
+		}
+	}
+	route.link = function(args0) {
+		if (args0.tag == null) return link.bind(link, args0)
+		return link({}, args0)
+	}
+	route.param = function(key4) {
+		if(typeof attrs3 !== "undefined" && typeof key4 !== "undefined") return attrs3[key4]
+		return attrs3
+>>>>>>> origin/esm-dev
 	}
 	return route
 }

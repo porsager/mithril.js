@@ -299,7 +299,7 @@ o.spec("ospec", function() {
 		})
 	})
 
-	o.spec("throwing in test context is recoreded as a failure", function() {
+	o.spec("throwing in test context is recorded as a failure", function() {
 		var oo
 		o.beforeEach(function(){oo = o.new()})
 		o.afterEach(function() {
@@ -532,7 +532,7 @@ o.spec("ospec", function() {
 					err = e
 				}
 				o(err instanceof Error).equals(true)
-				o(err.message).equals("`oodone()` should only be called once")
+				o(err.message).equals("'oodone()' should only be called once.")
 			})
 			oo.run(function(results) {
 				o(results.length).equals(1)
@@ -551,7 +551,7 @@ o.spec("ospec", function() {
 					err = e
 				}
 				o(err instanceof Error).equals(true)
-				o(err.message).equals("`oodone()` should only be called once")
+				o(err.message).equals("'oodone()' should only be called once.")
 			})
 			oo.run(function(results) {
 				o(results.length).equals(1)
@@ -570,7 +570,7 @@ o.spec("ospec", function() {
 					err = e
 				}
 				o(err instanceof Error).equals(true)
-				o(err.message).equals("`oodone()` should only be called once")
+				o(err.message).equals("'oodone()' should only be called once.")
 			})
 			oo.run(function(results) {
 				o(results.length).equals(1)
@@ -590,7 +590,7 @@ o.spec("ospec", function() {
 					err = e
 				}
 				o(err instanceof Error).equals(true)
-				o(err.message).equals("`oodone()` should only be called once")
+				o(err.message).equals("'oodone()' should only be called once.")
 			})
 			oo.run(function(results) {
 				o(results.length).equals(1)
@@ -656,6 +656,24 @@ o.spec("ospec", function() {
 			return wrapPromise(function() {
 				o(a).equals(b)
 				o(a).equals(1)("a and b should be initialized")
+			})
+		})
+	})
+
+	o.spec("descriptions", function() {
+		o("description returned on failure", function(done) {
+			var oo = o.new()
+			oo("no description", function() {
+				oo(1).equals(2)
+			})
+			oo("description", function() {
+				oo(1).equals(2)("howdy")
+			})
+			oo.run(function(results) {
+				o(results.length).equals(2)
+				o(results[1].message).equals(`howdy\n\n${results[0].message}`)
+				o(results[1].pass).equals(false)
+				done()
 			})
 		})
 	})

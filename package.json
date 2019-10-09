@@ -4,6 +4,7 @@
   "description": "A framework for building brilliant applications",
   "author": "Leo Horie",
   "license": "MIT",
+  "type": "module",
   "unpkg": "mithril.min.js",
   "module": "mithril.esm.js",
   "repository": "MithrilJS/mithril.js",

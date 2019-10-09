@@ -89,13 +89,6 @@ function hyperscript(selector) {
 
 	var vnode = hyperscriptVnode.apply(1, arguments)
 
-	const stack = new Error().stack
-	const oncreate = vnode.attrs.oncreate
-	vnode.attrs.oncreate = (vnode) => {
-		vnode.dom && (vnode.dom.stackTrace = stack)
-		oncreate && oncreate(vnode)
-	}
-
 	if (typeof selector === "string") {
 		vnode.children = Vnode.normalizeChildren(vnode.children)
 		if (selector !== "[") return execSelector(selectorCache[selector] || compileSelector(selector), vnode)

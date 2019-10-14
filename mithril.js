@@ -149,12 +149,6 @@ function hyperscript(selector) {
 		throw Error("The selector must be either a string or a component.");
 	}
 	var vnode = hyperscriptVnode.apply(1, arguments)
-	const stack = new Error().stack
-	const oncreate = vnode.attrs.oncreate
-	vnode.attrs.oncreate = (vnode) => {
-		vnode.dom && (vnode.dom.stackTrace = stack)
-		oncreate && oncreate(vnode)
-	}
 	if (typeof selector === "string") {
 		vnode.children = Vnode.normalizeChildren(vnode.children)
 		if (selector !== "[") return execSelector(selectorCache[selector] || compileSelector(selector), vnode)
@@ -172,6 +166,7 @@ hyperscript.fragment = function() {
 	vnode2.children = Vnode.normalizeChildren(vnode2.children)
 	return vnode2
 }
+/* global window */
 /** @constructor */
 var PromisePolyfill = function(executor) {
 	if (!(this instanceof PromisePolyfill)) throw new Error("Promise must be called with 'new'.")
@@ -456,7 +451,7 @@ var _13 = function($window) {
 	 * @param {Vnode[] | null} old - the list of vnodes of the last `render0()` call for
 	 *                               this part of the tree
 	 * @param {Vnode[] | null} vnodes - as above, but for the current `render0()` call.
-	 * @param {Function[]} hooks - an accumulator of post-render0 hooks (oncreate0/onupdate)
+	 * @param {Function[]} hooks - an accumulator of post-render0 hooks (oncreate/onupdate)
 	 * @param {Element | null} nextSibling - the next DOM node if we're dealing with a
 	 *                                       fragment that is not the last item in its
 	 *                                       parent
@@ -1637,7 +1632,7 @@ var compileTemplate = function(template) {
 //     return result2
 // }
 // ```
-var magic = /^(?:key7|oninit|oncreate2|onbeforeupdate|onupdate|onbeforeremove|onremove1)$/
+var magic = /^(?:key7|oninit|oncreate|onbeforeupdate|onupdate|onbeforeremove|onremove1)$/
 var censor = function(attrs4, extras) {
 	var result2 = {}
 	if (extras != null) {
@@ -1839,7 +1834,7 @@ var _28 = function($window, mountRedraw00) {
 				child0.attrs.href = null
 				child0.attrs["aria-disabled"] = "true"
 				// If you *really* do want add `onclick` on a disabled link, use
-				// an `oncreate1` hook to add it.
+				// an `oncreate` hook to add it.
 			} else {
 				options = vnode5.attrs.options
 				onclick = vnode5.attrs.onclick

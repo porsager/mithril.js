@@ -2,4 +2,4 @@
 
 var render = require("./render")
 
-module.exports = require("./api/mount-redraw")(render, requestAnimationFrame, console)
+module.exports = require("./api/mount-redraw")(render, window.requestAnimationFrame, console)

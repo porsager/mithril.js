@@ -1270,7 +1270,7 @@ var _16 = function(render0, schedule, console) {
 	}
 	return {mount: mount, redraw: redraw}
 }
-var mountRedraw0 = _16(render, requestAnimationFrame, console)
+var mountRedraw0 = _16(render, window.requestAnimationFrame, console)
 var buildQueryString = function(object) {
 	if (Object.prototype.toString.call(object) !== "[object Object]") return ""
 	var args = []
